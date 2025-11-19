@@ -75,8 +75,10 @@ const connectSrcUrls = [
   // "https://b.tiles.mapbox.com/",
   // "https://events.mapbox.com/",
   "https://api.maptiler.com/", // add this
+  "https://*.maptiler.com/",
+  "https://cdn.jsdelivr.net",
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = ["https://cdn.maptiler.com/"];
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -94,8 +96,11 @@ app.use(
         "https://res.cloudinary.com/drwljefif/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
         "https://images.unsplash.com/",
         "https://api.maptiler.com/",
+        "https://*.maptiler.com/",
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
+      childSrc: ["blob:"],
+      frameSrc: ["blob:"],
     },
   })
 );

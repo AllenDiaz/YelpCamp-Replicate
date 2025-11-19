@@ -1,12 +1,15 @@
 const Campground = require("../models/campground.js");
 const { cloudinary } = require("../cloudinary");
+const fetch = require("node-fetch");
 
 const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
+maptilerClient.config.fetch = fetch;
 
 module.exports.index = async (req, res) => {
   // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
   const campgrounds = await Campground.find({});
+  console.log(process.env.MAPTILER_API_KEY);
   res.render("campgrounds/index", { campgrounds });
 };
 
