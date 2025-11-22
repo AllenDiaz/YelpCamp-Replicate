@@ -1,9 +1,0 @@
-Crucial- 
-1. Integrating Mongoose With Express, 
-2. Defining our Model, products index, 
-3. products details, creating products, 
-4. updating products, 
-5. deleting products
-Important- 
-Nice to Have
-1. Filtering By Category

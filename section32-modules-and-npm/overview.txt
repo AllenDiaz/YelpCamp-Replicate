@@ -1,3 +1,0 @@
-Crucial- Module Exports, Requiring Modules, Using Npm, Installing Packages, Creating Package.json files
-Important- 
-Nice to Have- The Dad Jokes Package, Rainbow Package, The Figlet Package, Franc Package

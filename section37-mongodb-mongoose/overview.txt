@@ -1,3 +1,0 @@
-Crucial- The Role of ORM/ODM's, Connecting Mongoose to MongoDB, Defining a model, Mongoose CRUD, Schema Constraints
-Important- Method Instance & Static Methods, Mongoose Middleware
-Nice to Have- Mongoose Virtuals
