@@ -1,5 +1,5 @@
 const Campground = require("../models/campground.js");
-const { cloudinary } = require("../cloudinary");
+const { cloudinary } = require("../cloudinary/index.js");
 const fetch = require("node-fetch");
 
 const maptilerClient = require("@maptiler/client");

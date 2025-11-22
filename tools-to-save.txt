@@ -1,5 +1,0 @@
-nodejs.org - guide for building node project
-trello.com - use for noting what needed to do and what is the least and most important
-npmjs - use for searching package
-express.com - use for express guide
-mongoose.js.com - guide in using mongoose

@@ -1,9 +1,0 @@
-mkdirsync = create a file 
-fs = is the one that has the function for managing file. (ex fs.mkdir. use by: const fs = require('fs'))
-npm init - creation utility for package json
-
-fs.mkdirSync(folderName);
-fswriteFileSync()
-
-module.export = export the file
-require = adding the file and the object or function they export
