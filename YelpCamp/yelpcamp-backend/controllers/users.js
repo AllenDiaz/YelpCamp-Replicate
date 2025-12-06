@@ -2,7 +2,7 @@ const User = require("../models/user");
 const passport = require("passport");
 
 module.exports.renderRegister = async (req, res) => {
-  res.render("auth/register");
+  res.json({ message: "Render register page (frontend should handle UI)" });
 };
 
 module.exports.register = async (req, res) => {
@@ -12,32 +12,33 @@ module.exports.register = async (req, res) => {
     const registeredUser = await User.register(user, password);
     // console.log(registeredUser);
     req.login(registeredUser, (err) => {
-      if (err) return next(err);
-      req.flash("success", "Welcome to Yelp Camp!");
-      res.redirect("/campgrounds");
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(201).json({
+        message: "User registered and logged in",
+        user: registeredUser,
+      });
     });
   } catch (e) {
-    req.flash("error", e.message);
-    res.redirect("/register");
+    res.status(400).json({ error: e.message });
   }
 };
 
 module.exports.renderLogin = (req, res) => {
-  res.render("auth/login");
+  res.json({ message: "Render login page (frontend should handle UI)" });
 };
 
 module.exports.login = async (req, res) => {
-  req.flash("success", "Welcome Back ");
-  const redirectUrl = res.locals.returnTo || "/campgrounds";
-  res.redirect(redirectUrl);
+  res.json({
+    message: "Login successful",
+    user: req.user,
+  });
 };
 
 module.exports.logout = async (req, res, next) => {
   req.logout(function (err) {
     if (err) {
-      next(err);
+      return res.status(500).json({ error: err.message });
     }
-    req.flash("success", "You succesfully logout");
-    res.redirect("/login");
+    res.json({ message: "Successfully logged out" });
   });
 };

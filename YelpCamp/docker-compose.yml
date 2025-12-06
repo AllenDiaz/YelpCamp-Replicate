@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:4.4
+    container_name: yelpcamp-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - yelpcamp-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API Service
+  backend:
+    build:
+      context: ./yelpcamp-backend
+      dockerfile: Dockerfile
+    container_name: yelpcamp-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DB_URL: mongodb://admin:password123@mongodb:27017/yelp-camp?authSource=admin
+      SECRET: ${SECRET:-yoursupersecretkey}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_KEY: ${CLOUDINARY_KEY}
+      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
+      MAPTILER_API_KEY: ${MAPTILER_API_KEY}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks: 
+      - yelpcamp-network
+    volumes:
+      - ./yelpcamp-backend:/app
+      - /app/node_modules
+
+  # Frontend Next.js Service
+  frontend:
+    build:
+      context: ./yelpcamp-frontend
+      dockerfile: Dockerfile
+    container_name: yelpcamp-frontend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://backend:3000
+    depends_on:
+      - backend
+    networks:
+      - yelpcamp-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  yelpcamp-network:
+    driver: bridge

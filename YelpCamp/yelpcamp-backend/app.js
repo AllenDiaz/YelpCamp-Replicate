@@ -162,7 +162,7 @@ app.use("/campgrounds/:id/reviews", reviewRoutes);
 app.use("/", userRoutes);
 
 app.get("/", async (req, res) => {
-  res.render("home");
+  res.json({ message: "Welcome to YelpCamp API" });
 });
 
 app.all(/(.*)/, (req, res, next) => {
@@ -172,7 +172,11 @@ app.all(/(.*)/, (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) err.message = "Oh No, Something Went Wrong! ";
-  res.status(statusCode).render("error", { err });
+  res.status(statusCode).json({
+    error: err.message,
+    statusCode,
+    stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
+  });
 });
 
 const port = process.env.PORT || 3000;

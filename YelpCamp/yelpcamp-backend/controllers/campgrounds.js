@@ -10,11 +10,11 @@ module.exports.index = async (req, res) => {
   // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
   const campgrounds = await Campground.find({});
   console.log(process.env.MAPTILER_API_KEY);
-  res.render("campgrounds/index", { campgrounds });
+  res.json({ campgrounds });
 };
 
 module.exports.renderNewForm = (req, res) => {
-  res.render("campgrounds/new");
+  res.json({ message: "Render new campground form (frontend should handle UI)" });
 };
 
 module.exports.createCampground = async (req, res, next) => {
@@ -32,8 +32,10 @@ module.exports.createCampground = async (req, res, next) => {
   campground.author = req.user._id;
   await campground.save();
   console.log(campground);
-  req.flash("success", "Successfully made a new campground!");
-  res.redirect(`/campgrounds/${campground._id}`);
+  res.status(201).json({
+    message: "Successfully made a new campground!",
+    campground,
+  });
 };
 
 module.exports.showCampground = async (req, res) => {
@@ -50,20 +52,18 @@ module.exports.showCampground = async (req, res) => {
   // const review = Review.find({});
 
   if (!campground) {
-    req.flash("error", "Cannot find the campground");
-    return res.redirect("/campgrounds");
+    return res.status(404).json({ error: "Cannot find the campground" });
   }
-  res.render("campgrounds/show", { campground });
+  res.json({ campground });
 };
 
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
   if (!campground) {
-    req.flash("error", "Cannot find the campground");
-    return res.redirect("/campgrounds");
+    return res.status(404).json({ error: "Cannot find the campground" });
   }
-  res.render("campgrounds/edit", { campground });
+  res.json({ campground });
 };
 
 module.exports.updateCampground = async (req, res) => {
@@ -92,13 +92,14 @@ module.exports.updateCampground = async (req, res) => {
     console.log(campground);
   }
   await campground.save();
-  req.flash("success", "Successfully update!");
-  res.redirect(`/campgrounds/${id}`);
+  res.json({
+    message: "Successfully updated campground!",
+    campground,
+  });
 };
 
 module.exports.deleteCampground = async (req, res) => {
   const { id } = req.params;
   await Campground.findByIdAndDelete(id);
-  req.flash("success", "Successfully delete the campground");
-  res.redirect("/campgrounds");
+  res.json({ message: "Successfully deleted the campground" });
 };
