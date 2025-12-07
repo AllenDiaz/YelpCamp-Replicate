@@ -7,8 +7,10 @@ const ExpressError = require("./utils/ExpressError");
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.returnTo = req.originalUrl;
-    req.flash("error", "you must be signed in");
-    return res.redirect("/login");
+    return res.status(401).json({ 
+      error: "You must be signed in",
+      message: "Authentication required" 
+    });
   }
   next();
 };
@@ -26,8 +28,10 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
   if (!campground.author.equals(req.user._id)) {
-    req.flash("error", "Oops your not allowed here");
-    return res.redirect(`/campgrounds/${id}`);
+    return res.status(403).json({ 
+      error: "Permission denied",
+      message: "You are not authorized to perform this action" 
+    });
   }
   next();
 };
@@ -36,8 +40,10 @@ module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;
   const review = await Review.findById(reviewId);
   if (!review.author.equals(req.user._id)) {
-    req.flash("error", "Oops your not allowed here");
-    return res.redirect(`/campgrounds/${id}`);
+    return res.status(403).json({ 
+      error: "Permission denied",
+      message: "You are not authorized to perform this action" 
+    });
   }
   next();
 };

@@ -5,15 +5,14 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
-const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const helmet = require("helmet");
+const cors = require("cors");
 
 const User = require("./models/user.js");
 const campgroundRoutes = require("./routes/campgrounds.js");
@@ -38,72 +37,24 @@ db.once("open", () => {
 const app = express();
 app.set("query parser", "extended");
 
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+// EJS view engine removed - API only
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(sanitizeV5({ replaceWith: "_" }));
-app.use(helmet({}));
+// Simplified Helmet for API-only (CSP not needed for JSON responses)
+app.use(helmet({
+  contentSecurityPolicy: false, // Not needed for API-only backend
+}));
 
-const scriptSrcUrls = [
-  "https://stackpath.bootstrapcdn.com/",
-  // "https://api.tiles.mapbox.com/",
-  // "https://api.mapbox.com/",
-  "https://kit.fontawesome.com/",
-  "https://cdnjs.cloudflare.com/",
-  "https://cdn.jsdelivr.net",
-  "https://cdn.maptiler.com/", // add this
-];
-const styleSrcUrls = [
-  "https://kit-free.fontawesome.com/",
-  "https://stackpath.bootstrapcdn.com/",
-  // "https://api.mapbox.com/",
-  // "https://api.tiles.mapbox.com/",
-
-  "https://fonts.googleapis.com/",
-  "https://use.fontawesome.com/",
-  "https://cdn.jsdelivr.net",
-  "https://cdn.maptiler.com/", // add this
-];
-const connectSrcUrls = [
-  // "https://api.mapbox.com/",
-  // "https://a.tiles.mapbox.com/",
-  // "https://b.tiles.mapbox.com/",
-  // "https://events.mapbox.com/",
-  "https://api.maptiler.com/", // add this
-  "https://*.maptiler.com/",
-  "https://cdn.jsdelivr.net",
-];
-const fontSrcUrls = ["https://cdn.maptiler.com/"];
-
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: ["'self'", ...connectSrcUrls],
-      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", "blob:"],
-      objectSrc: [],
-      imgSrc: [
-        "'self'",
-        "blob:",
-        "data:",
-        "https://res.cloudinary.com/drwljefif/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
-        "https://images.unsplash.com/",
-        "https://api.maptiler.com/",
-        "https://*.maptiler.com/",
-      ],
-      fontSrc: ["'self'", ...fontSrcUrls],
-      childSrc: ["blob:"],
-      frameSrc: ["blob:"],
-    },
-  })
-);
+// Enable CORS for frontend communication
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:3001",
+  credentials: true, // Allow cookies/sessions
+}));
 
 const secret = process.env.SECRET || "thisshouldbeabettersecret";
 
@@ -130,7 +81,7 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
-app.use(flash());
+// Flash removed - API uses JSON responses
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -139,14 +90,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
-  // console.log(req.session);
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.currentUser = req.user;
-
-  next();
-});
+// res.locals setup removed - not needed for API
 
 app.get("/fakeUser", async (req, res) => {
   const user = new User({
