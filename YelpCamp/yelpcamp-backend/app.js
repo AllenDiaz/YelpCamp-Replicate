@@ -3,7 +3,6 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
 const createError = require("http-errors");
 const methodOverride = require("method-override");
@@ -36,8 +35,7 @@ app.set("query parser", "extended");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-// app.use(express.static(path.join(__dirname, "/public")));
-app.use(express.static(path.join(__dirname, "public")));
+// Static file serving removed - Next.js frontend handles all static assets
 app.use(sanitizeV5({ replaceWith: "_" }));
 // Simplified Helmet for API-only (CSP not needed for JSON responses)
 app.use(helmet({
