@@ -1,6 +1,5 @@
 const Campground = require("../models/campground.js");
 const Review = require("../models/review.js");
-const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.createReview = async (req, res) => {
   const campground = await Campground.findById(req.params.id);

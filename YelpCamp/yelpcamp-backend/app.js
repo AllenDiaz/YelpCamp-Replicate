@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const ExpressError = require("./utils/ExpressError.js");
+const createError = require("http-errors");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
@@ -110,14 +110,14 @@ app.get("/", async (req, res) => {
 });
 
 app.all(/(.*)/, (req, res, next) => {
-  next(new ExpressError(" page not found", 404));
+  next(createError(404, "Page not found"));
 });
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500 } = err;
-  if (!err.message) err.message = "Oh No, Something Went Wrong! ";
+  const statusCode = err.statusCode || err.status || 500;
+  const message = err.message || "Oh No, Something Went Wrong!";
   res.status(statusCode).json({
-    error: err.message,
+    error: message,
     statusCode,
     stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
   });

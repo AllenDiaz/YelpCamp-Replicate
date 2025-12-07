@@ -2,7 +2,7 @@ const session = require("express-session");
 const { campgroundSchema, reviewSchema } = require("./Schemas");
 const Campground = require("./models/campground");
 const Review = require("./models/review");
-const ExpressError = require("./utils/ExpressError");
+const createError = require("http-errors");
 
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -53,7 +53,7 @@ module.exports.validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
+    throw createError(400, msg);
   } else {
     next();
   }
@@ -64,7 +64,7 @@ module.exports.validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
+    throw createError(400, msg);
   } else {
     next();
   }
