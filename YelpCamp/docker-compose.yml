@@ -34,6 +34,9 @@ services:
       NODE_ENV: production
       DB_URL: mongodb://admin:password123@mongodb:27017/yelp-camp?authSource=admin
       SECRET: ${SECRET:-yoursupersecretkey}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key}
+      JWT_EXPIRE: ${JWT_EXPIRE:-7d}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3001}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_KEY: ${CLOUDINARY_KEY}
       CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
@@ -43,9 +46,6 @@ services:
         condition: service_healthy
     networks: 
       - yelpcamp-network
-    volumes:
-      - ./yelpcamp-backend:/app
-      - /app/node_modules
 
   # Frontend Next.js Service
   frontend:

@@ -1,4 +1,4 @@
-const { campgroundSchema, reviewSchema } = require("./Schemas");
+const { campgroundSchema, reviewSchema } = require("./schemas");
 const Campground = require("./models/campground");
 const Review = require("./models/review");
 const User = require("./models/user");
