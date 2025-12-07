@@ -24,7 +24,7 @@ router
     catchAsync(campgrounds.createCampground)
   );
 
-router.get("/new", isLoggedIn, campgrounds.renderNewForm);
+// Removed: server-side rendering route for new campground form
 
 router
   .route("/:id")
@@ -38,11 +38,6 @@ router
   )
   .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
 
-router.get(
-  "/:id/edit",
-  isLoggedIn,
-  isAuthor,
-  catchAsync(campgrounds.renderEditForm)
-);
+// Removed: server-side rendering route for edit campground form
 
 module.exports = router;
