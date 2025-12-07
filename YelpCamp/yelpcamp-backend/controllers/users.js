@@ -1,44 +1,76 @@
 const User = require("../models/user");
-const passport = require("passport");
+const { generateToken } = require("../utils/jwt");
+const createError = require("http-errors");
 
-module.exports.renderRegister = async (req, res) => {
-  res.json({ message: "Render register page (frontend should handle UI)" });
-};
-
-module.exports.register = async (req, res) => {
+module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    const user = new User({ email, username });
-    const registeredUser = await User.register(user, password);
-    // console.log(registeredUser);
-    req.login(registeredUser, (err) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.status(201).json({
-        message: "User registered and logged in",
-        user: registeredUser,
-      });
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return next(createError(400, "Username or email already exists"));
+    }
+
+    // Create new user
+    const user = new User({ username, email, password });
+    await user.save();
+
+    // Generate JWT token
+    const token = generateToken(user);
+
+    res.status(201).json({
+      message: "User registered successfully",
+      token,
+      user: user.toJSON(),
     });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    next(createError(400, e.message));
   }
 };
 
-module.exports.renderLogin = (req, res) => {
-  res.json({ message: "Render login page (frontend should handle UI)" });
+module.exports.login = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    // Find user by username or email
+    const user = await User.findOne({
+      $or: [{ username }, { email: username }],
+    });
+
+    if (!user) {
+      return next(createError(401, "Invalid username or password"));
+    }
+
+    // Check password
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      return next(createError(401, "Invalid username or password"));
+    }
+
+    // Generate JWT token
+    const token = generateToken(user);
+
+    res.json({
+      message: "Login successful",
+      token,
+      user: user.toJSON(),
+    });
+  } catch (e) {
+    next(createError(500, e.message));
+  }
 };
 
-module.exports.login = async (req, res) => {
-  res.json({
-    message: "Login successful",
-    user: req.user,
+module.exports.logout = async (req, res) => {
+  // With JWT, logout is handled client-side by removing the token
+  res.json({ 
+    message: "Successfully logged out. Please remove the token from client storage." 
   });
 };
 
-module.exports.logout = async (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ message: "Successfully logged out" });
+module.exports.getCurrentUser = async (req, res) => {
+  // Return current authenticated user (set by auth middleware)
+  res.json({
+    user: req.user,
   });
 };

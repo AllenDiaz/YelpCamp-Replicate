@@ -7,14 +7,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const createError = require("http-errors");
 const methodOverride = require("method-override");
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
 const helmet = require("helmet");
 const cors = require("cors");
-
-const User = require("./models/user.js");
 const campgroundRoutes = require("./routes/campgrounds.js");
 const reviewRoutes = require("./routes/reviews.js");
 const userRoutes = require("./routes/users.js");
@@ -53,53 +47,10 @@ app.use(helmet({
 // Enable CORS for frontend communication
 app.use(cors({
   origin: process.env.FRONTEND_URL || "http://localhost:3001",
-  credentials: true, // Allow cookies/sessions
+  credentials: true, // Allow cookies for potential future use
 }));
 
-const secret = process.env.SECRET || "thisshouldbeabettersecret";
-
-const store = new MongoStore({
-  url: dbUrl,
-  secret,
-  touchAfter: 24 * 60 * 60, // time in seconds
-});
-
-store.on("error", function (e) {
-  console.log("SESSION STORE ERROR", e);
-});
-
-const sessionConfig = {
-  store,
-  secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
-};
-
-app.use(session(sessionConfig));
-// Flash removed - API uses JSON responses
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// res.locals setup removed - not needed for API
-
-app.get("/fakeUser", async (req, res) => {
-  const user = new User({
-    email: "allendiaz.developer@gmail.com",
-    username: "allen@dev",
-  });
-  const newUser = await User.register(user, "chicken");
-  res.send(newUser);
-});
+// Session and Passport removed - using JWT authentication
 
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
