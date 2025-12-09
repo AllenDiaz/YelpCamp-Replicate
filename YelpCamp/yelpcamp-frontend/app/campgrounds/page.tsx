@@ -28,7 +28,7 @@ export default function CampgroundsPage() {
     const fetchCampgrounds = async () => {
       try {
         const response = await campgroundAPI.getAll();
-        setCampgrounds(response.data);
+        setCampgrounds(response.data.campgrounds || []);
       } catch (error: any) {
         showToast('Failed to load campgrounds', 'error');
       } finally {
@@ -40,7 +40,7 @@ export default function CampgroundsPage() {
   }, [showToast]);
 
   // Transform campgrounds for map
-  const geoJSONFeatures = campgrounds.map((camp) => ({
+  const geoJSONFeatures = Array.isArray(campgrounds) ? campgrounds.map((camp) => ({
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -50,7 +50,7 @@ export default function CampgroundsPage() {
       popupMarkup: `<a href="/campgrounds/${camp._id}"><strong>${camp.title}</strong></a><p>${camp.location}</p>`,
       id: camp._id,
     },
-  }));
+  })) : [];
 
   if (isLoading) {
     return (
