@@ -62,7 +62,7 @@ export default function CampgroundDetailPage() {
     const fetchCampground = async () => {
       try {
         const response = await campgroundAPI.getById(params.id as string);
-        setCampground(response.data);
+        setCampground(response.data.campground || response.data);
       } catch (error: any) {
         showToast('Failed to load campground', 'error');
         router.push('/campgrounds');
@@ -94,13 +94,9 @@ export default function CampgroundDetailPage() {
       });
       showToast('Review added successfully', 'success');
       
-      // Add new review to state
-      if (campground) {
-        setCampground({
-          ...campground,
-          reviews: [...campground.reviews, response.data],
-        });
-      }
+      // Refetch campground to get populated review with author
+      const updatedResponse = await campgroundAPI.getById(params.id as string);
+      setCampground(updatedResponse.data.campground || updatedResponse.data);
       
       reset();
       setRating(0);
@@ -273,12 +269,14 @@ export default function CampgroundDetailPage() {
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <StarRating rating={review.rating} readonly />
-                    <p className="text-sm text-gray-600 mt-1">
-                      by {review.author.username}
-                    </p>
+                    {review.author?.username && (
+                      <p className="text-sm text-gray-600 mt-1">
+                        by {review.author.username}
+                      </p>
+                    )}
                   </div>
                   
-                  {user && review.author._id === user._id && (
+                  {user && review.author?._id === user._id && (
                     <button
                       onClick={() => handleDeleteReview(review._id)}
                       className="text-red-600 hover:text-red-800"

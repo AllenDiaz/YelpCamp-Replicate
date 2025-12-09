@@ -14,30 +14,49 @@ interface MapSingleProps {
 export default function MapSingle({ longitude, latitude, title, apiKey }: MapSingleProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (map.current || !mapContainer.current) return;
+    if (initialized.current || !mapContainer.current) return;
 
+    if (!apiKey || apiKey === 'your_maptiler_api_key_here') {
+      console.error('MapTiler API key is missing or invalid');
+      return;
+    }
+
+    initialized.current = true;
     maptilersdk.config.apiKey = apiKey;
 
     map.current = new maptilersdk.Map({
       container: mapContainer.current,
-      style: maptilersdk.MapStyle.STREETS,
+      style: `https://api.maptiler.com/maps/openstreetmap/style.json?key=${apiKey}`,
       center: [longitude, latitude],
       zoom: 10,
     });
 
-    new maptilersdk.Marker({ color: '#FF0000' })
-      .setLngLat([longitude, latitude])
-      .setPopup(
-        new maptilersdk.Popup().setHTML(`<h3 class="font-bold">${title}</h3>`)
-      )
-      .addTo(map.current);
+    map.current.on('load', () => {
+      new maptilersdk.Marker({ color: '#FF0000' })
+        .setLngLat([longitude, latitude])
+        .setPopup(
+          new maptilersdk.Popup().setHTML(`<h3 class="font-bold">${title}</h3>`)
+        )
+        .addTo(map.current);
+    });
 
     return () => {
-      if (map.current) map.current.remove();
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+        initialized.current = false;
+      }
     };
   }, [longitude, latitude, title, apiKey]);
 
-  return <div ref={mapContainer} className="w-full h-[300px] rounded-lg" />;
+  return (
+    <div 
+      ref={mapContainer} 
+      className="w-full h-[300px] rounded-lg shadow-lg bg-gray-200"
+      style={{ minHeight: '300px' }}
+    />
+  );
 }

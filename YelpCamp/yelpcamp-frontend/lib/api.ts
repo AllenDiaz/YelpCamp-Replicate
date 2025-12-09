@@ -71,7 +71,7 @@ export const campgroundAPI = {
 
 export const reviewAPI = {
   create: (campgroundId: string, data: { rating: number; body: string }) =>
-    api.post(`/campgrounds/${campgroundId}/reviews`, data),
+    api.post(`/campgrounds/${campgroundId}/reviews`, { review: data }),
   
   delete: (campgroundId: string, reviewId: string) =>
     api.delete(`/campgrounds/${campgroundId}/reviews/${reviewId}`),

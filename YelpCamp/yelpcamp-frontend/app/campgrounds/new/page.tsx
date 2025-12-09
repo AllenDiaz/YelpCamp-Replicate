@@ -49,7 +49,8 @@ export default function NewCampgroundPage() {
 
       const response = await campgroundAPI.create(formData);
       showToast('Campground created successfully!', 'success');
-      router.push(`/campgrounds/${response.data._id}`);
+      const campgroundId = response.data.campground?._id || response.data._id;
+      router.push(`/campgrounds/${campgroundId}`);
     } catch (error: any) {
       showToast(
         error.response?.data?.message || 'Failed to create campground',
@@ -126,7 +127,7 @@ export default function NewCampgroundPage() {
                 Campground Price
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <span className="absolute left-3 top-2 text-gray-500">₱</span>
                 <input
                   id="price"
                   type="number"
