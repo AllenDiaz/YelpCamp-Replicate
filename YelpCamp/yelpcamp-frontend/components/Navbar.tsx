@@ -23,11 +23,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900 text-white shadow-lg">
+    <nav className="sticky top-0 z-50 bg-secondary-800 text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
-          <Link href="/" className="text-xl font-bold hover:text-gray-300 transition">
+          <Link href="/" className="text-xl font-bold hover:text-primary-300 transition-colors">
             YelpCamp
           </Link>
 
@@ -35,20 +35,20 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-6">
             <Link
               href="/"
-              className="hover:text-gray-300 transition"
+              className="hover:text-primary-300 transition-colors"
             >
               Home
             </Link>
             <Link
               href="/campgrounds"
-              className="hover:text-gray-300 transition"
+              className="hover:text-primary-300 transition-colors"
             >
               Campgrounds
             </Link>
             {isAuthenticated && (
               <Link
                 href="/campgrounds/new"
-                className="hover:text-gray-300 transition"
+                className="hover:text-primary-300 transition-colors"
               >
                 New
               </Link>
@@ -61,23 +61,23 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="hover:text-gray-300 transition"
+                  className="hover:text-primary-300 transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+                  className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors font-medium"
                 >
                   Register
                 </Link>
               </>
             ) : (
               <>
-                <span className="text-gray-300">Hello, {user?.username}</span>
+                <span className="text-secondary-200">Hello, {user?.username}</span>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+                  className="px-4 py-2 bg-accent-600 hover:bg-accent-700 rounded-lg transition-colors font-medium"
                 >
                   Logout
                 </button>
@@ -87,7 +87,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 hover:bg-gray-800 rounded"
+            className="md:hidden p-2 hover:bg-secondary-700 rounded transition-colors"
             aria-label="Toggle menu"
           >
             <svg

@@ -24,8 +24,8 @@ export default function Toast() {
         className={clsx(
           'px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 min-w-[300px]',
           {
-            'bg-green-600 text-white': type === 'success',
-            'bg-red-600 text-white': type === 'error',
+            'bg-success text-white': type === 'success',
+            'bg-error text-white': type === 'error',
           }
         )}
       >

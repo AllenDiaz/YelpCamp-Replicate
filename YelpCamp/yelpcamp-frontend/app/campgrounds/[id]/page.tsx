@@ -128,7 +128,7 @@ export default function CampgroundDetailPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center items-center h-64">
-          <p className="text-xl text-gray-600">Loading...</p>
+          <p className="text-xl text-secondary-600">Loading...</p>
         </div>
       </div>
     );
@@ -149,16 +149,16 @@ export default function CampgroundDetailPage() {
           <ImageCarousel images={campground.images} />
 
           {/* Info Card */}
-          <div className="bg-white rounded-lg shadow-md p-6 mt-4">
+          <div className="bg-surface rounded-lg shadow-md p-6 mt-4">
             <h2 className="text-2xl font-bold mb-2">{campground.title}</h2>
-            <p className="text-gray-700 mb-4">{campground.description}</p>
+            <p className="text-secondary-700 mb-4">{campground.description}</p>
             
-            <div className="space-y-2 text-gray-600">
+            <div className="space-y-2 text-secondary-600">
               <p>📍 Location: {campground.location}</p>
               {campground.author?.username && (
                 <p>👤 Submitted by: {campground.author.username}</p>
               )}
-              <p className="text-xl font-bold text-blue-600">
+              <p className="text-xl font-bold text-primary-600">
                 ${campground.price}/night
               </p>
             </div>
@@ -167,7 +167,7 @@ export default function CampgroundDetailPage() {
             <div className="flex gap-3 mt-6">
               <Link
                 href="/campgrounds"
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                className="px-4 py-2 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition"
               >
                 All Campgrounds
               </Link>
@@ -176,13 +176,13 @@ export default function CampgroundDetailPage() {
                 <>
                   <Link
                     href={`/campgrounds/${campground._id}/edit`}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={handleDelete}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                    className="px-4 py-2 bg-accent-600 text-white rounded-lg hover:bg-accent-700 transition"
                   >
                     Delete
                   </button>
@@ -206,18 +206,18 @@ export default function CampgroundDetailPage() {
 
           {/* Review Form */}
           {isAuthenticated && (
-            <div className="bg-white rounded-lg shadow-md p-6 mt-4">
+            <div className="bg-surface rounded-lg shadow-md p-6 mt-4">
               <h2 className="text-2xl font-bold mb-4">Leave a Review</h2>
               
               <form onSubmit={handleSubmit(onSubmitReview)} className="space-y-4">
                 {/* Rating */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
                     Rating
                   </label>
                   <StarRating rating={rating} onChange={setRating} />
                   {rating === 0 && (
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="mt-1 text-sm text-error">
                       Please select a rating
                     </p>
                   )}
@@ -227,22 +227,22 @@ export default function CampgroundDetailPage() {
                 <div>
                   <label
                     htmlFor="body"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-secondary-700 mb-1"
                   >
                     Review
                   </label>
                   <textarea
                     id="body"
                     rows={4}
-                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.body ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                      errors.body ? 'border-error' : 'border-border'
                     }`}
                     {...register('body', {
                       required: 'Review text is required',
                     })}
                   />
                   {errors.body && (
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="mt-1 text-sm text-error">
                       {errors.body.message}
                     </p>
                   )}
@@ -251,7 +251,7 @@ export default function CampgroundDetailPage() {
                 <button
                   type="submit"
                   disabled={rating === 0}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
+                  className="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition disabled:bg-secondary-400"
                 >
                   Submit Review
                 </button>
@@ -264,13 +264,13 @@ export default function CampgroundDetailPage() {
             {(campground.reviews || []).map((review) => (
               <div
                 key={review._id}
-                className="bg-white rounded-lg shadow-md p-4"
+                className="bg-surface rounded-lg shadow-md p-4"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <StarRating rating={review.rating} readonly />
                     {review.author?.username && (
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-secondary-600 mt-1">
                         by {review.author.username}
                       </p>
                     )}
@@ -279,13 +279,13 @@ export default function CampgroundDetailPage() {
                   {user && review.author?._id === user._id && (
                     <button
                       onClick={() => handleDeleteReview(review._id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-accent-600 hover:text-accent-800"
                     >
                       Delete
                     </button>
                   )}
                 </div>
-                <p className="text-gray-700">{review.body}</p>
+                <p className="text-secondary-700">{review.body}</p>
               </div>
             ))}
           </div>

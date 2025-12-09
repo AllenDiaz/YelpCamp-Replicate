@@ -56,13 +56,13 @@ export default function CampgroundsPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center items-center h-64">
-          <p className="text-xl text-gray-600">Loading campgrounds...</p>
+          <p className="text-xl text-secondary-600">Loading campgrounds...</p>
         </div>
       </div>
     );
   }
 
-  const mapApiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY; 
+  const mapApiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY || ''; 
   
   return (
     <div className="container mx-auto px-4 py-8">
@@ -74,11 +74,11 @@ export default function CampgroundsPage() {
 
       {/* Header */}
       <div className="flex justify-between items-center my-6">
-        <h1 className="text-3xl font-bold">All Campgrounds</h1>
+        <h1 className="text-3xl font-bold text-secondary-800">All Campgrounds</h1>
         {isAuthenticated && (
           <Link
             href="/campgrounds/new"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
           >
             Add Campground
           </Link>
@@ -88,14 +88,14 @@ export default function CampgroundsPage() {
       {/* Campgrounds List */}
       <div className="space-y-6">
         {campgrounds.length === 0 ? (
-          <p className="text-center text-gray-600 py-12">
+          <p className="text-center text-secondary-600 py-12">
             No campgrounds found. Be the first to add one!
           </p>
         ) : (
           campgrounds.map((campground) => (
             <div
               key={campground._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition"
+              className="bg-surface rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-border"
             >
               <div className="md:flex">
                 {/* Image */}
@@ -113,18 +113,18 @@ export default function CampgroundsPage() {
 
                 {/* Content */}
                 <div className="md:w-2/3 p-6">
-                  <h2 className="text-2xl font-bold mb-2">{campground.title}</h2>
-                  <p className="text-gray-700 mb-3">{campground.description}</p>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <h2 className="text-2xl font-bold mb-2 text-secondary-800">{campground.title}</h2>
+                  <p className="text-secondary-700 mb-3">{campground.description}</p>
+                  <p className="text-sm text-secondary-500 mb-4">
                     📍 {campground.location}
                   </p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold text-blue-600">
+                    <span className="text-lg font-semibold text-accent-600">
                       ${campground.price}/night
                     </span>
                     <Link
                       href={`/campgrounds/${campground._id}`}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                      className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
                     >
                       View Details
                     </Link>

@@ -41,38 +41,38 @@ api.interceptors.response.use(
 // API Methods
 export const authAPI = {
   register: (data: { username: string; email: string; password: string }) =>
-    api.post('/register', data),
+    api.post('/api/users/register', data),
   
   login: (data: { username: string; password: string }) =>
-    api.post('/login', data),
+    api.post('/api/users/login', data),
   
-  logout: () => api.post('/logout'),
+  logout: () => api.post('/api/users/logout'),
   
-  getCurrentUser: () => api.get('/me'),
+  getCurrentUser: () => api.get('/api/users/me'),
 };
 
 export const campgroundAPI = {
-  getAll: () => api.get('/campgrounds'),
+  getAll: () => api.get('/api/campgrounds'),
   
-  getById: (id: string) => api.get(`/campgrounds/${id}`),
+  getById: (id: string) => api.get(`/api/campgrounds/${id}`),
   
   create: (formData: FormData) =>
-    api.post('/campgrounds', formData, {
+    api.post('/api/campgrounds', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
   
   update: (id: string, formData: FormData) =>
-    api.put(`/campgrounds/${id}`, formData, {
+    api.put(`/api/campgrounds/${id}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
   
-  delete: (id: string) => api.delete(`/campgrounds/${id}`),
+  delete: (id: string) => api.delete(`/api/campgrounds/${id}`),
 };
 
 export const reviewAPI = {
   create: (campgroundId: string, data: { rating: number; body: string }) =>
-    api.post(`/campgrounds/${campgroundId}/reviews`, { review: data }),
+    api.post(`/api/campgrounds/${campgroundId}/reviews`, { review: data }),
   
   delete: (campgroundId: string, reviewId: string) =>
-    api.delete(`/campgrounds/${campgroundId}/reviews/${reviewId}`),
+    api.delete(`/api/campgrounds/${campgroundId}/reviews/${reviewId}`),
 };
