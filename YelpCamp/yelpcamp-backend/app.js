@@ -13,6 +13,8 @@ const createError = require("http-errors");
 const methodOverride = require("method-override");
 const helmet = require("helmet");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 const campgroundRoutes = require("./routes/campgrounds.js");
 const reviewRoutes = require("./routes/reviews.js");
 const userRoutes = require("./routes/users.js");
@@ -55,12 +57,22 @@ app.use(cors({
 
 // Session and Passport removed - using JWT authentication
 
-app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/reviews", reviewRoutes);
-app.use("/", userRoutes);
+// Swagger API Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "YelpCamp API Documentation",
+}));
+
+// API routes
+app.use("/api/campgrounds", campgroundRoutes);
+app.use("/api/campgrounds/:id/reviews", reviewRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", async (req, res) => {
-  res.json({ message: "Welcome to YelpCamp API" });
+  res.json({ 
+    message: "Welcome to YelpCamp API",
+    documentation: "/api-docs"
+  });
 });
 
 app.all(/(.*)/, (req, res, next) => {
