@@ -62,12 +62,14 @@ export default function CampgroundsPage() {
     );
   }
 
+  const mapApiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY; 
+  
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Map */}
+      {/* Map - Always display, even with no campgrounds */}
       <MapCluster
         campgrounds={geoJSONFeatures}
-        apiKey={process.env.NEXT_PUBLIC_MAPTILER_API_KEY || ''}
+        apiKey={mapApiKey}
       />
 
       {/* Header */}

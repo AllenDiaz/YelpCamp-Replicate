@@ -2,6 +2,11 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
+// Disable SSL certificate validation for development (Cloudinary)
+if (process.env.NODE_ENV === "development") {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
+
 const express = require("express");
 const mongoose = require("mongoose");
 const createError = require("http-errors");

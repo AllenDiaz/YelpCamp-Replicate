@@ -34,10 +34,11 @@ export default function NewCampgroundPage() {
     setIsLoading(true);
     try {
       const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('location', data.location);
-      formData.append('price', data.price.toString());
-      formData.append('description', data.description);
+      // Backend expects data nested under 'campground' key
+      formData.append('campground[title]', data.title);
+      formData.append('campground[location]', data.location);
+      formData.append('campground[price]', data.price.toString());
+      formData.append('campground[description]', data.description);
 
       // Append multiple images
       if (selectedFiles) {

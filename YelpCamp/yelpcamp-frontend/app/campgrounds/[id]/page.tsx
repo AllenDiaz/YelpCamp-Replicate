@@ -140,7 +140,7 @@ export default function CampgroundDetailPage() {
 
   if (!campground) return null;
 
-  const isOwner = user && campground.author._id === user._id;
+  const isOwner = user && campground.author?._id === user._id;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -159,7 +159,9 @@ export default function CampgroundDetailPage() {
             
             <div className="space-y-2 text-gray-600">
               <p>📍 Location: {campground.location}</p>
-              <p>👤 Submitted by: {campground.author.username}</p>
+              {campground.author?.username && (
+                <p>👤 Submitted by: {campground.author.username}</p>
+              )}
               <p className="text-xl font-bold text-blue-600">
                 ${campground.price}/night
               </p>
@@ -197,12 +199,14 @@ export default function CampgroundDetailPage() {
         {/* Right Column */}
         <div>
           {/* Map */}
-          <MapSingle
-            longitude={campground.geometry.coordinates[0]}
-            latitude={campground.geometry.coordinates[1]}
-            title={campground.title}
-            apiKey={process.env.NEXT_PUBLIC_MAPTILER_API_KEY || ''}
-          />
+          {campground.geometry?.coordinates && (
+            <MapSingle
+              longitude={campground.geometry.coordinates[0]}
+              latitude={campground.geometry.coordinates[1]}
+              title={campground.title}
+              apiKey={process.env.NEXT_PUBLIC_MAPTILER_API_KEY || 'kvXQBg0Um0R2BqbmHi22'}
+            />
+          )}
 
           {/* Review Form */}
           {isAuthenticated && (
@@ -261,7 +265,7 @@ export default function CampgroundDetailPage() {
 
           {/* Reviews List */}
           <div className="mt-4 space-y-4">
-            {campground.reviews.map((review) => (
+            {(campground.reviews || []).map((review) => (
               <div
                 key={review._id}
                 className="bg-white rounded-lg shadow-md p-4"

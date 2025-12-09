@@ -12,16 +12,26 @@ interface MapClusterProps {
 export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (map.current || !mapContainer.current) return;
+    if (initialized.current || !mapContainer.current) return;
 
+    if (!apiKey || apiKey === 'your_maptiler_api_key_here') {
+      console.error('MapTiler API key is missing or invalid:', apiKey);
+      return;
+    }
+
+    console.log('Number of campgrounds to display:', campgrounds.length);
+    
+    initialized.current = true;
     maptilersdk.config.apiKey = apiKey;
 
+    // Use OpenStreetMap style (no deprecation warnings)
     map.current = new maptilersdk.Map({
       container: mapContainer.current,
-      style: maptilersdk.MapStyle.STREETS,
-      center: [-103.5917, 40.6699], // Center of US
+      style: `https://api.maptiler.com/maps/openstreetmap/style.json?key=${apiKey}`,
+      center: [120.9842, 14.5995], // Center of Philippines
       zoom: 3,
     });
 
@@ -48,13 +58,15 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
           'circle-color': [
             'step',
             ['get', 'point_count'],
-            '#51bbd6',
+            '#3b82f6',
             10,
-            '#f1f075',
+            '#8b5cf6',
             30,
-            '#f28cb1',
+            '#ec4899',
           ],
-          'circle-radius': ['step', ['get', 'point_count'], 20, 10, 30, 30, 40],
+          'circle-radius': ['step', ['get', 'point_count'], 20, 10, 25, 30, 30],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#fff',
         },
       });
 
@@ -66,8 +78,11 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
         filter: ['has', 'point_count'],
         layout: {
           'text-field': '{point_count_abbreviated}',
-          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-          'text-size': 12,
+          'text-font': ['Noto Sans Regular'],
+          'text-size': 14,
+        },
+        paint: {
+          'text-color': '#ffffff',
         },
       });
 
@@ -78,9 +93,9 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
         source: 'campgrounds',
         filter: ['!', ['has', 'point_count']],
         paint: {
-          'circle-color': '#11b4da',
+          'circle-color': '#3b82f6',
           'circle-radius': 8,
-          'circle-stroke-width': 1,
+          'circle-stroke-width': 2,
           'circle-stroke-color': '#fff',
         },
       });
@@ -119,12 +134,28 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
       map.current.on('mouseleave', 'clusters', () => {
         map.current.getCanvas().style.cursor = '';
       });
+      map.current.on('mouseenter', 'unclustered-point', () => {
+        map.current.getCanvas().style.cursor = 'pointer';
+      });
+      map.current.on('mouseleave', 'unclustered-point', () => {
+        map.current.getCanvas().style.cursor = '';
+      });
     });
 
     return () => {
-      if (map.current) map.current.remove();
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+        initialized.current = false;
+      }
     };
   }, [campgrounds, apiKey]);
 
-  return <div ref={mapContainer} className="w-full h-[500px] rounded-lg" />;
+  return (
+    <div 
+      ref={mapContainer} 
+      className="w-full h-[500px] rounded-lg shadow-lg bg-gray-200"
+      style={{ minHeight: '500px' }}
+    />
+  );
 }
