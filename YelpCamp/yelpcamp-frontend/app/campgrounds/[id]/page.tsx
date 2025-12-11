@@ -149,7 +149,7 @@ export default function CampgroundDetailPage() {
           <ImageCarousel images={campground.images} />
 
           {/* Info Card */}
-          <div className="bg-surface rounded-lg shadow-md p-6 mt-4">
+          <div className="glass-card rounded-lg p-6 mt-4">
             <h2 className="text-2xl font-bold mb-2">{campground.title}</h2>
             <p className="text-secondary-700 mb-4">{campground.description}</p>
             
@@ -206,7 +206,7 @@ export default function CampgroundDetailPage() {
 
           {/* Review Form */}
           {isAuthenticated && (
-            <div className="bg-surface rounded-lg shadow-md p-6 mt-4">
+            <div className="glass-card rounded-lg p-6 mt-4">
               <h2 className="text-2xl font-bold mb-4">Leave a Review</h2>
               
               <form onSubmit={handleSubmit(onSubmitReview)} className="space-y-4">
@@ -264,7 +264,7 @@ export default function CampgroundDetailPage() {
             {(campground.reviews || []).map((review) => (
               <div
                 key={review._id}
-                className="bg-surface rounded-lg shadow-md p-4"
+                className="glass-card rounded-lg p-4"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>

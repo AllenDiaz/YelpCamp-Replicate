@@ -66,7 +66,7 @@ export default function NewCampgroundPage() {
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-6">New Campground</h1>
 
-        <div className="bg-surface rounded-lg shadow-md p-6">
+        <div className="glass-card rounded-lg p-6">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Title */}
             <div>

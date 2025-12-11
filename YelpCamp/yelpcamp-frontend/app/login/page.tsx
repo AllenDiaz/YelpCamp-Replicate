@@ -46,7 +46,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary-50 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-surface rounded-lg shadow-lg overflow-hidden border border-border">
+        <div className="glass-card rounded-lg overflow-hidden">
           {/* Header Image */}
           <img
             src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"

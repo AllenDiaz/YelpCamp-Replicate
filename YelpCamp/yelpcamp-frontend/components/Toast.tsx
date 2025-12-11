@@ -22,10 +22,10 @@ export default function Toast() {
     <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
       <div
         className={clsx(
-          'px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 min-w-[300px]',
+          'px-6 py-4 rounded-lg flex items-center space-x-3 min-w-[300px] glass-strong shadow-lg',
           {
-            'bg-success text-white': type === 'success',
-            'bg-error text-white': type === 'error',
+            'text-success border-success/30': type === 'success',
+            'text-error border-error/30': type === 'error',
           }
         )}
       >

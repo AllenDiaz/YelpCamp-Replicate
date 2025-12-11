@@ -95,7 +95,7 @@ export default function CampgroundsPage() {
           campgrounds.map((campground) => (
             <div
               key={campground._id}
-              className="bg-surface rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-border"
+              className="glass-card rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
             >
               <div className="md:flex">
                 {/* Image */}
