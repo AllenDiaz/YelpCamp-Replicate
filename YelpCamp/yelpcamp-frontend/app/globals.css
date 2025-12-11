@@ -116,10 +116,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode - auto (system preference) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: #0f172a;
-    --foreground: #f1f5f9;
+    --foreground: #ffffff;
     
     /* Adjust colors for dark mode */
     --primary: var(--primary-400);
@@ -133,10 +134,47 @@
   }
 }
 
+/* Dark mode - manual override */
+:root.dark {
+  --background: #0f172a;
+  --foreground: #ffffff;
+  
+  /* Adjust colors for dark mode */
+  --primary: var(--primary-400);
+  --secondary: var(--secondary-300);
+  --accent: var(--accent-400);
+  
+  --surface: #1e293b;
+  --surface-hover: #334155;
+  --border: #334155;
+  --border-hover: #475569;
+}
+
+/* Light mode - manual override (overrides system dark preference) */
+:root.light {
+  --background: #ffffff;
+  --foreground: #1f2937;
+  --primary: var(--primary-600);
+  --secondary: var(--secondary-700);
+  --accent: var(--accent-500);
+  --surface: #ffffff;
+  --surface-hover: #f9fafb;
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label {
+  color: inherit;
 }
 
 /* Custom animations */

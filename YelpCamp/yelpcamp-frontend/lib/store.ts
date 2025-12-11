@@ -81,3 +81,62 @@ export const useToastStore = create<ToastState>((set) => ({
   
   hideToast: () => set({ show: false }),
 }));
+
+type Theme = 'light' | 'dark' | 'system';
+
+interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  initTheme: () => void;
+}
+
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      theme: 'system',
+      
+      setTheme: (theme) => {
+        set({ theme });
+        
+        if (typeof window !== 'undefined') {
+          const root = document.documentElement;
+          
+          if (theme === 'system') {
+            // Remove manual theme class, let CSS media query handle it
+            root.classList.remove('light', 'dark');
+          } else {
+            // Remove both classes first
+            root.classList.remove('light', 'dark');
+            // Add the selected theme
+            root.classList.add(theme);
+          }
+        }
+      },
+      
+      initTheme: () => {
+        if (typeof window !== 'undefined') {
+          const stored = localStorage.getItem('theme-storage');
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              const theme = parsed.state?.theme || 'system';
+              
+              const root = document.documentElement;
+              if (theme === 'system') {
+                root.classList.remove('light', 'dark');
+              } else {
+                root.classList.remove('light', 'dark');
+                root.classList.add(theme);
+              }
+            } catch (e) {
+              console.error('Failed to parse theme', e);
+            }
+          }
+        }
+      },
+    }),
+    {
+      name: 'theme-storage',
+    }
+  )
+);

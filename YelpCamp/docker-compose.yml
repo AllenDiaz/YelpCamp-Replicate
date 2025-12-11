@@ -59,7 +59,7 @@ services:
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_API_URL: http://localhost:3000
-      NEXT_PUBLIC_MAPTILER_API_KEY: ${MAPTILER_API_KEY:-kvXQBg0Um0R2BqbmHi22}
+      NEXT_PUBLIC_MAPTILER_API_KEY: ${MAPTILER_API_KEY}
     depends_on:
       - backend
     networks:

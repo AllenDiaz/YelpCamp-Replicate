@@ -200,7 +200,7 @@ export default function CampgroundDetailPage() {
               longitude={campground.geometry.coordinates[0]}
               latitude={campground.geometry.coordinates[1]}
               title={campground.title}
-              apiKey={process.env.NEXT_PUBLIC_MAPTILER_API_KEY || 'kvXQBg0Um0R2BqbmHi22'}
+              apiKey={process.env.NEXT_PUBLIC_MAPTILER_API_KEY || ''}
             />
           )}
 

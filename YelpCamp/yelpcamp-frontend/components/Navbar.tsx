@@ -5,6 +5,7 @@ import { useAuthStore } from '@/lib/store';
 import { authAPI } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useToastStore } from '@/lib/store';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const { user, isAuthenticated, clearAuth } = useAuthStore();
@@ -55,8 +56,10 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Auth Links */}
+          {/* Auth Links & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
+            
             {!isAuthenticated ? (
               <>
                 <Link

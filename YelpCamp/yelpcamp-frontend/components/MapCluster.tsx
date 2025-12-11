@@ -122,7 +122,11 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const { popupMarkup } = e.features[0].properties;
 
-        new maptilersdk.Popup()
+        new maptilersdk.Popup({
+          className: 'custom-popup',
+          closeButton: true,
+          closeOnClick: true,
+        })
           .setLngLat(coordinates)
           .setHTML(popupMarkup)
           .addTo(map.current);
@@ -152,10 +156,82 @@ export default function MapCluster({ campgrounds, apiKey }: MapClusterProps) {
   }, [campgrounds, apiKey]);
 
   return (
-    <div 
-      ref={mapContainer} 
-      className="w-full h-[500px] rounded-lg shadow-lg bg-gray-200"
-      style={{ minHeight: '500px' }}
-    />
+    <>
+      <style jsx global>{`
+        /* Light mode styles */
+        .custom-popup .maplibregl-popup-content,
+        .custom-popup .maptiler-popup-content {
+          background-color: #ffffff !important;
+          padding: 12px !important;
+          border-radius: 8px !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        }
+        
+        .custom-popup .maplibregl-popup-tip,
+        .custom-popup .maptiler-popup-tip {
+          border-top-color: #ffffff !important;
+        }
+        
+        .custom-popup a {
+          color: #3b82f6 !important;
+          text-decoration: none !important;
+          font-weight: 600 !important;
+          font-size: 16px !important;
+          display: block !important;
+        }
+        
+        .custom-popup a:hover {
+          color: #2563eb !important;
+          text-decoration: underline !important;
+        }
+        
+        .custom-popup p {
+          margin: 4px 0 0 0 !important;
+          color: #1f2937 !important;
+          font-size: 14px !important;
+        }
+        
+        .custom-popup .maplibregl-popup-close-button,
+        .custom-popup .maptiler-popup-close-button {
+          color: #1f2937 !important;
+          font-size: 20px !important;
+          font-weight: bold !important;
+        }
+
+        /* Dark mode styles */
+        .dark .custom-popup .maplibregl-popup-content,
+        .dark .custom-popup .maptiler-popup-content {
+          background-color: #1f2937 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        .dark .custom-popup .maplibregl-popup-tip,
+        .dark .custom-popup .maptiler-popup-tip {
+          border-top-color: #1f2937 !important;
+        }
+        
+        .dark .custom-popup a {
+          color: #60a5fa !important;
+        }
+        
+        .dark .custom-popup a:hover {
+          color: #93c5fd !important;
+        }
+        
+        .dark .custom-popup p {
+          color: #d1d5db !important;
+        }
+        
+        .dark .custom-popup .maplibregl-popup-close-button,
+        .dark .custom-popup .maptiler-popup-close-button {
+          color: #d1d5db !important;
+        }
+      `}</style>
+      <div 
+        ref={mapContainer} 
+        className="w-full h-[500px] rounded-lg shadow-lg bg-gray-200"
+        style={{ minHeight: '500px' }}
+      />
+    </>
   );
 }
