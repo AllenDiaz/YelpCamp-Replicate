@@ -13,22 +13,22 @@ export default function Home() {
       
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl">
-        <h1 className="text-6xl md:text-7xl font-bold mb-6 animate-fade-in text-primary-50">
+        <h1 className="text-6xl md:text-7xl font-bold mb-6 animate-fade-in !text-white drop-shadow-lg">
           YelpCamp
         </h1>
         
-        <p className="text-xl md:text-2xl mb-4 text-primary-100">
+        <p className="text-xl md:text-2xl mb-4 !text-white font-semibold drop-shadow-md">
           Welcome to YelpCamp!
         </p>
         
-        <p className="text-lg md:text-xl mb-8 text-secondary-200 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl mb-8 !text-white max-w-2xl mx-auto drop-shadow-md">
           Jump right in and explore our many campgrounds. <br />
           Feel free to share some of your own and comment on others!
         </p>
         
         <Link
           href="/campgrounds"
-          className="inline-block px-8 py-4 bg-primary-600 text-white font-bold text-lg rounded-lg hover:bg-primary-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="inline-block px-8 py-4 bg-primary-600 !text-white font-bold text-lg rounded-lg hover:bg-primary-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           View Campgrounds
         </Link>
