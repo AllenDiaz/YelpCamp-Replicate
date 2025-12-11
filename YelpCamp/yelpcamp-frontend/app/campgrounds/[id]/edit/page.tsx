@@ -20,7 +20,16 @@ interface Campground {
   location: string;
   price: number;
   description: string;
-  images: Array<{ url: string; filename: string }>;
+  images?: Array<{ url: string; filename: string }>;
+  geometry?: {
+    type: string;
+    coordinates: number[];
+  };
+  author?: {
+    _id: string;
+    username: string;
+  };
+  reviews?: string[];
 }
 
 export default function EditCampgroundPage() {
@@ -44,7 +53,7 @@ export default function EditCampgroundPage() {
     const fetchCampground = async () => {
       try {
         const response = await campgroundAPI.getById(params.id as string);
-        const data = response.data;
+        const data = response.data.campground;
         setCampground(data);
         
         // Populate form
@@ -235,7 +244,7 @@ export default function EditCampgroundPage() {
             </div>
 
             {/* Current Images */}
-            {campground.images.length > 0 && (
+            {campground.images && campground.images.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-secondary-700 mb-2">
                   Current Images (check to delete)
