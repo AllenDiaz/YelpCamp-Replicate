@@ -19,7 +19,12 @@ export default function Toast() {
   if (!show) return null;
 
   return (
-    <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
+    <div
+      className="fixed top-20 right-4 z-50 animate-slide-in-right"
+      role={type === 'error' ? 'alert' : 'status'}
+      aria-live={type === 'error' ? 'assertive' : 'polite'}
+      aria-atomic="true"
+    >
       <div
         className={clsx(
           'px-6 py-4 rounded-lg flex items-center space-x-3 min-w-[300px] glass-strong shadow-lg',
