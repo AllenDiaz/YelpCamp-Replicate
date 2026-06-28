@@ -106,7 +106,7 @@ export default function CampgroundsPage() {
                         ? campground.images[0].url
                         : 'https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png'
                     }
-                    alt={campground.title}
+                    alt={`${campground.title} in ${campground.location}`}
                     className="w-full h-64 object-cover"
                   />
                 </div>

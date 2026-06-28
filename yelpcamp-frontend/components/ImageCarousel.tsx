@@ -4,9 +4,11 @@ import { useState } from 'react';
 
 interface ImageCarouselProps {
   images: Array<{ url: string; filename: string }>;
+  /** Optional subject (e.g. campground title) used to build descriptive alt text. */
+  title?: string;
 }
 
-export default function ImageCarousel({ images }: ImageCarouselProps) {
+export default function ImageCarousel({ images, title }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!images || images.length === 0) {
@@ -34,7 +36,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
       {/* Main Image */}
       <img
         src={images[currentIndex].url}
-        alt={images[currentIndex].filename}
+        alt={`${title ? `${title} — ` : ''}image ${currentIndex + 1} of ${images.length}`}
         className="w-full h-full object-cover"
       />
 

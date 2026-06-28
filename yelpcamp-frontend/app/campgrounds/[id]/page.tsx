@@ -146,7 +146,7 @@ export default function CampgroundDetailPage() {
           <h1 className="text-3xl font-bold mb-4">Campground Detail</h1>
           
           {/* Image Carousel */}
-          <ImageCarousel images={campground.images} />
+          <ImageCarousel images={campground.images} title={campground.title} />
 
           {/* Info Card */}
           <div className="glass-card rounded-lg p-6 mt-4">
