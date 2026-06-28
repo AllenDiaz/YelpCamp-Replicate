@@ -127,7 +127,7 @@ export default function NewCampgroundPage() {
                 Campground Price
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-secondary-500">₱</span>
+                <span className="absolute left-3 top-2 text-secondary-500">$</span>
                 <input
                   id="price"
                   type="number"
